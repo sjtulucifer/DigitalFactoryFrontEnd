@@ -1,0 +1,47 @@
+<button nz-button (click)="addAccessPermission()" nzType="primary">添加访问权限</button>
+<br />
+<br />
+<nz-modal [(nzVisible)]="accessPermissionAddIsVisible" nzTitle="添加访问权限" (nzOnCancel)="accessPermissionHandleCancel()">
+    <div *nzModalContent>
+        <form nz-form [formGroup]="accessPermissionAddForm">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>访问权限名</nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="nameErrorTpl">
+                    <input nz-input formControlName="name" [(ngModel)]="accessPermissionAdd.AccessPermissionName" placeholder="请输入访问权限名" />
+                    <ng-template #nameErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">请输入访问权限名!</ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7">访问权限描述</nz-form-label>
+                <nz-form-control [nzSpan]="12">
+                    <textarea formControlName="description" nz-input rows="2" [(ngModel)]="accessPermissionAdd.AccessPermissionDescription"
+                        placeholder="访问权限描述"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+    <div *nzModalFooter>
+        <button nz-button nzType="default" (click)="accessPermissionHandleCancel()">取消</button>
+        <button nz-button nzType="primary" (click)="accessPermissionHandleOk()" [disabled]="!accessPermissionAddForm.valid">确定</button>
+    </div>
+</nz-modal>
+<nz-table #accessPermissionListTable [nzData]="accessPermissionList">
+    <thead>
+        <tr>
+            <th>访问权限名</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of accessPermissionListTable.data">
+            <td>{{data.AccessPermissionName}}</td>
+            <td>
+                <a (click)="editAccessPermission(data.AccessPermissionId!)">编辑</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a nz-popconfirm nzPopconfirmTitle="确认删除该访问权限吗?" (nzOnConfirm)="deleteAccessPermission(data.AccessPermissionId!)">删除</a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

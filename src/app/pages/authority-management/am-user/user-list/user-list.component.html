@@ -1,0 +1,38 @@
+<!--{{userList | json}}-->
+<button nz-button (click)="addRow()" nzType="primary">添加新用户</button>
+<br />
+<br />
+<nz-modal [(nzVisible)]="resetPasswordIsVisible" [nzTitle]="'重置用户'+resetPasswordUser.UserLoginName+'密码'" (nzOnCancel)="resetCancel()" [nzFooter]="null" >
+    <div *nzModalContent>
+        <input type="password" nz-input placeholder="新密码" [(ngModel)]="newPassword" />
+        <button nz-button nzType="default" (click)="resetOK()">重置</button>
+    </div>
+</nz-modal>
+
+<nz-table #userListTable [nzData]="userList">
+    <thead>
+        <tr>
+            <th *ngFor="let column of listOfColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">
+                {{ column.title }}
+            </th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of userListTable.data">
+            <td>{{ data.UserLoginName }}</td>
+            <td>{{ data.UserName }}</td>
+            <td>{{ data.UserPhone }}</td>
+            <td>{{ data.UserEmail }}</td>
+            <td>{{ data.UserDescription }}</td>
+            <td>
+                <a (click)="editRow(data.UserId)">编辑</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a nz-popconfirm nzPopconfirmTitle="确认删除该用户吗?" (nzOnConfirm)="deleteRow(data.UserId)">删除</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <button nz-button nzType="primary" (click)="resetPassword(data)">重置密码</button>
+                
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

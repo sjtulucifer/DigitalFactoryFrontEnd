@@ -1,0 +1,55 @@
+<nz-card>
+    <nz-card-tab>
+        <nz-tabset nzType="card">
+            <nz-tab nzTitle="目录信息">
+                <form nz-form [formGroup]="menuUpdateForm" (ngSubmit)="UpdateMenuDetail()">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>目录分类</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..."
+                            [nzErrorTip]="categoryErrorTpl">
+                            <nz-select formControlName="category" [(ngModel)]="menuUpdate.MenuCategory">
+                                <nz-option nzValue="权限管理" nzLabel="权限管理"></nz-option>
+                                <nz-option nzValue="其他" nzLabel="其他"></nz-option>
+                            </nz-select>
+                            <ng-template #categoryErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">请选择目录分类!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>目录名</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..."
+                            [nzErrorTip]="nameErrorTpl">
+                            <input nz-input formControlName="name" [(ngModel)]="menuUpdate.MenuName"
+                                placeholder="请输入目录名" />
+                            <ng-template #nameErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">请输入目录名!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>url</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..."
+                            [nzErrorTip]="urlErrorTpl">
+                            <input nz-input formControlName="url" [(ngModel)]="menuUpdate.MenuUrl" placeholder="目录地址" />
+                            <ng-template #urlErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">请输入目录地址!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7">目录描述</nz-form-label>
+                        <nz-form-control [nzSpan]="12">
+                            <textarea formControlName="description" nz-input rows="2"
+                                [(ngModel)]="menuUpdate.MenuDescription" placeholder="目录描述"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                            <button nz-button nzType="primary" [disabled]="!menuUpdateForm.valid">保存</button>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-tab>
+        </nz-tabset>
+    </nz-card-tab>

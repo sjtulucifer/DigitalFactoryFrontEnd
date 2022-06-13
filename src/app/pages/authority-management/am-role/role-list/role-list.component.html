@@ -1,0 +1,48 @@
+<button nz-button (click)="addRole()" nzType="primary">添加角色</button>
+<br />
+<br />
+<nz-modal [(nzVisible)]="roleAddIsVisible" nzTitle="添加角色" (nzOnCancel)="roleHandleCancel()">
+    <div *nzModalContent>
+        <form nz-form [formGroup]="roleAddForm">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>用户登录名</nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="nameErrorTpl">
+                    <input nz-input formControlName="name" [(ngModel)]="roleAdd.RoleName" placeholder="请输入角色名" />
+                    <ng-template #nameErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">请输入角色名!</ng-container>
+                        <ng-container *ngIf="control.hasError('duplicated')">该角色名已存在!</ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7">用户描述</nz-form-label>
+                <nz-form-control [nzSpan]="12">
+                    <textarea formControlName="description" nz-input rows="2" [(ngModel)]="roleAdd.RoleDescription"
+                        placeholder="角色描述"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+    <div *nzModalFooter>
+        <button nz-button nzType="default" (click)="roleHandleCancel()">取消</button>
+        <button nz-button nzType="primary" (click)="roleHandleOk()" [disabled]="!roleAddForm.valid">确定</button>
+    </div>
+</nz-modal>
+<nz-table #roleListTable [nzData]="roleList">
+    <thead>
+        <tr>
+            <th>角色名</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of roleListTable.data">
+            <td>{{ data.RoleName }}</td>
+            <td>
+                <a (click)="eidtRow(data.RoleId!)">编辑</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a nz-popconfirm nzPopconfirmTitle="确认删除该用户吗?" (nzOnConfirm)="deleteRow(data.RoleId!)">删除</a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

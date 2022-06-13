@@ -1,0 +1,72 @@
+<button nz-button (click)="addMenu()" nzType="primary">添加新目录</button>
+<br />
+<br />
+<nz-modal [(nzVisible)]="menuAddIsVisible" nzTitle="添加目录" (nzOnCancel)="menuHandleCancel()">
+    <div *nzModalContent>
+        <form nz-form [formGroup]="menuAddForm">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>目录分类</nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="categoryErrorTpl">
+                    <nz-select formControlName="category" [(ngModel)]="menuAdd.MenuCategory">
+                        <nz-option nzValue="权限管理" nzLabel="权限管理"></nz-option>
+                        <nz-option nzValue="其他" nzLabel="其他"></nz-option>
+                    </nz-select>
+                    <ng-template #categoryErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">请选择目录分类!</ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>目录名</nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="nameErrorTpl">
+                    <input nz-input formControlName="name" [(ngModel)]="menuAdd.MenuName" placeholder="请输入目录名" />
+                    <ng-template #nameErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">请输入目录名!</ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>url</nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="urlErrorTpl">
+                    <input nz-input formControlName="url" [(ngModel)]="menuAdd.MenuUrl" placeholder="目录地址" />
+                    <ng-template #urlErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">请输入目录地址!</ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7">目录描述</nz-form-label>
+                <nz-form-control [nzSpan]="12">
+                    <textarea formControlName="description" nz-input rows="2" [(ngModel)]="menuAdd.MenuDescription"
+                        placeholder="目录描述"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+    <div *nzModalFooter>
+        <button nz-button nzType="default" (click)="menuHandleCancel()">取消</button>
+        <button nz-button nzType="primary" (click)="menuHandleOk()" [disabled]="!menuAddForm.valid">确定</button>
+    </div>
+</nz-modal>
+<nz-table #menuListTable [nzData]="menuList">
+    <thead>
+        <tr>
+            <th>目录分类</th>
+            <th>目录名</th>
+            <th>目录地址</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of menuListTable.data">
+            <td>{{data.MenuCategory}}</td>
+            <td>{{data.MenuName}}</td>
+            <td>{{data.MenuUrl}}</td>
+            <td>
+                <a (click)="editMenu(data.MenuId!)">编辑</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a nz-popconfirm nzPopconfirmTitle="确认删除该目录吗?" (nzOnConfirm)="deleteMenu(data.MenuId!)">删除</a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

@@ -1,0 +1,82 @@
+<!--{{user|json}}-->
+<form nz-form [formGroup]="userAddForm" (ngSubmit)="addUser()">
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>用户登录名</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="loginErrorTpl">
+            <input nz-input formControlName="login" [(ngModel)]="user.UserLoginName" placeholder="请输入你的用户名" />
+            <ng-template #loginErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('required')">请输入登录名!</ng-container>
+                <ng-container *ngIf="control.hasError('duplicated')">该登录名已存在!</ng-container>
+            </ng-template>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>登录密码</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="passwordErrorTpl">
+            <input nz-input type="password" formControlName="password" [(ngModel)]="user.UserLoginPassword"
+                (ngModelChange)="validateConfirmPassword()" />
+            <ng-template #passwordErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('minlength')">密码长度必须大于5个字符!</ng-container>
+                <ng-container *ngIf="control.hasError('required')">密码必须输入!</ng-container>
+            </ng-template>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>确认密码</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="confirmErrorTpl">
+            <input nz-input type="password" formControlName="confirm" placeholder="确认密码" />
+            <ng-template #confirmErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('required')">请确认密码!</ng-container>
+                <ng-container *ngIf="control.hasError('confirm')">密码不匹配!</ng-container>
+            </ng-template>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>用户姓名</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="nameErrorTpl">
+            <input nz-input formControlName="name" [(ngModel)]="user.UserName" placeholder="请输入你的姓名" />
+            <ng-template #nameErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('required')">姓名不能为空!</ng-container>
+            </ng-template>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>用户手机</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="phoneErrorTpl">
+            <input nz-input type="tel" formControlName="phone" [(ngModel)]="user.UserPhone" placeholder="请输入手机号" />
+            <ng-template #phoneErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('required')">手机号码不能为空!</ng-container>
+                <ng-container *ngIf="control.hasError('pattern')">手机号码格式不正确!</ng-container>
+            </ng-template>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>电子邮件</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="emailErrorTpl">
+            <input nz-input formControlName="email" [(ngModel)]="user.UserEmail" placeholder="email" type="email" />
+            <ng-template #emailErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('email')">输入的不是电子邮件地址!</ng-container>
+                <ng-container *ngIf="control.hasError('required')">请输入你的电子邮件!</ng-container>
+            </ng-template>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7">用户描述</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+            <textarea formControlName="description" nz-input rows="2" [(ngModel)]="user.UserDescription"
+                placeholder="用户描述"></textarea>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+            <button nz-button nzType="primary" [disabled]="!userAddForm.valid">确认</button>
+            <button nz-button (click)="resetForm($event)">重置</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+<!--
+<div *nzModalFooter>
+    <button nz-button nzType="primary" [disabled]="!userAddFrom.valid" (click)="addUser()">确认</button>
+    <button nz-button (click)="resetForm($event)">重置</button>
+</div>
+-->

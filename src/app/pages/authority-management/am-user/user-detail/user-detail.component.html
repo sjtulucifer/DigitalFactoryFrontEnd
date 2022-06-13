@@ -1,0 +1,109 @@
+<nz-card [nzTitle]="user.UserLoginName">
+    <nz-card-tab>
+        <nz-tabset nzType="card">
+            <nz-tab nzTitle="基本信息">
+                <form nz-form [formGroup]="userEditForm" (ngSubmit)="UpdateUserProfile()">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>用户登录名</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="loginErrorTpl">
+                            <input nz-input formControlName="login" [(ngModel)]="user.UserLoginName" placeholder="请输入你的用户名" />
+                            <ng-template #loginErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">请输入登录名!</ng-container>
+                                <ng-container *ngIf="control.hasError('duplicated')">该登录名已存在!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>姓名</nz-form-label>
+                        <nz-form-control [nzSpan]="12" [nzErrorTip]="nameErrorTpl">
+                            <input nz-input formControlName="name" [(ngModel)]="user.UserName" placeholder="请输入你的姓名" />
+                            <ng-template #nameErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">姓名不能为空!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>手机</nz-form-label>
+                        <nz-form-control [nzSpan]="12" [nzErrorTip]="phoneErrorTpl">
+                            <input nz-input type="tel" formControlName="phone" [(ngModel)]="user.UserPhone"
+                                placeholder="请输入手机号" />
+                            <ng-template #phoneErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">手机号码不能为空!</ng-container>
+                                <ng-container *ngIf="control.hasError('pattern')">手机号码格式不正确!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>电子邮件</nz-form-label>
+                        <nz-form-control [nzSpan]="12" [nzErrorTip]="emailErrorTpl">
+                            <input nz-input formControlName="email" [(ngModel)]="user.UserEmail" placeholder="email"
+                                type="email" />
+                            <ng-template #emailErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('email')">输入的不是电子邮件地址!</ng-container>
+                                <ng-container *ngIf="control.hasError('required')">请输入你的电子邮件!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7">用户描述</nz-form-label>
+                        <nz-form-control [nzSpan]="12">
+                            <textarea formControlName="description" nz-input rows="2" [(ngModel)]="user.UserDescription"
+                                placeholder="用户描述"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                            <button nz-button nzType="primary" [disabled]="!userEditForm.valid">保存</button>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-tab>
+            <nz-tab nzTitle="角色信息">
+                <button nz-button (click)="UpdateUserRoleRelation()" nzType="primary">更新用户角色信息</button>
+                <br />
+                <br />
+                <nz-modal [(nzVisible)]="roleIsVisible" nzTitle="角色选择" (nzOnCancel)="roleHandleCancel()">
+                    <div *nzModalContent>
+                        <nz-table #roleListTable [nzData]="roleList" [nzFrontPagination]="false">
+                            <thead>
+                                <tr>
+                                    <th [nzChecked]="checked"
+                                        [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+                                    <th *ngFor="let column of listOfRoleColumn">
+                                        {{ column.title }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of roleListTable.data">
+                                    <td [nzChecked]="setOfCheckedId.has(data.RoleId!)" (nzCheckedChange)="onItemChecked(data.RoleId!, $event)"></td>
+                                    <td>{{ data.RoleName }}</td>
+                                    <td>{{ data.RoleDescription }}</td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                    <div *nzModalFooter>
+                        <button nz-button nzType="default" (click)="roleHandleCancel()">取消</button>
+                        <button nz-button nzType="primary" (click)="roleHandleOk()">确定</button>
+                    </div>
+                </nz-modal>
+                <nz-table #userRoleListTable [nzData]="userRoleList">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let column of listOfRoleColumn">
+                                {{ column.title }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of userRoleListTable.data">
+                            <td>{{ data.RoleName }}</td>
+                            <td>{{ data.RoleDescription }}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-tab>
+        </nz-tabset>
+    </nz-card-tab>
+</nz-card>

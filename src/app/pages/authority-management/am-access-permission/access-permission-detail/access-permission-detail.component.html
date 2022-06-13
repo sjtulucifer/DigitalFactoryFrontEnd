@@ -1,0 +1,84 @@
+<nz-card>
+    <nz-card-tab>
+        <nz-tabset nzType="card">
+            <nz-tab nzTitle="基本信息">
+                <form nz-form [formGroup]="accessPermissionEditForm" (ngSubmit)="UpdateAccessPermission()">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>访问权限名</nz-form-label>
+                        <nz-form-control [nzSpan]="12" [nzErrorTip]="nameErrorTpl">
+                            <input nz-input formControlName="name" [(ngModel)]="accessPermission.AccessPermissionName"
+                                placeholder="请输入访问权限名" />
+                            <ng-template #nameErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">访问权限名不能为空!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7">访问权限描述</nz-form-label>
+                        <nz-form-control [nzSpan]="12">
+                            <textarea formControlName="description" nz-input rows="2"
+                                [(ngModel)]="accessPermission.AccessPermissionDescription"
+                                placeholder="访问权限描述"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                            <button nz-button nzType="primary" [disabled]="!accessPermissionEditForm.valid">保存</button>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+
+            </nz-tab>
+            <nz-tab nzTitle="目录信息">
+                <button nz-button (click)="UpdateAccessPermissionMenus()" nzType="primary">更新访问权限目录信息</button>
+                <br />
+                <br />
+                <nz-modal [(nzVisible)]="menuIsVisible" nzTitle="目录选择" (nzOnCancel)="menuHandleCancel()">
+                    <div *nzModalContent>
+                        <nz-table #menuListTable [nzData]="menuList" [nzFrontPagination]="false">
+                            <thead>
+                                <tr>
+                                    <th [nzChecked]="checked" [nzIndeterminate]="indeterminate"
+                                        (nzCheckedChange)="onAllChecked($event)"></th>
+                                    <th>分类</th>
+                                    <th>名称</th>
+                                    <th>地址</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of menuListTable.data">
+                                    <td [nzChecked]="setOfCheckedId.has(data.MenuId!)"
+                                        (nzCheckedChange)="onItemChecked(data.MenuId!, $event)"></td>
+                                    <td>{{ data.MenuCategory }}</td>
+                                    <td>{{ data.MenuName }}</td>
+                                    <td>{{ data.MenuUrl }}</td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                    <div *nzModalFooter>
+                        <button nz-button nzType="default" (click)="menuHandleCancel()">取消</button>
+                        <button nz-button nzType="primary" (click)="menuHandleOk()">确定</button>
+                    </div>
+                </nz-modal>
+                <nz-table #accessPermissionMenuListTable [nzData]="accessPermissionMenuList">
+                    <thead>
+                        <tr>
+                            <th>分类</th>
+                            <th>名称</th>
+                            <th>地址</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of accessPermissionMenuListTable.data">
+                            <td>{{ data.MenuCategory }}</td>
+                            <td>{{ data.MenuName }}</td>
+                            <td>{{ data.MenuUrl }}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-tab>
+        </nz-tabset>
+    </nz-card-tab>
+</nz-card>
