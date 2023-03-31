@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AccessPermission } from 'src/app/entities/access-permission';
 import { AccessPermissionService } from 'src/app/services/access-permission.service';
@@ -18,10 +18,10 @@ export class AccessPermissionListComponent implements OnInit {
   // 添加窗体时否显示
   accessPermissionAddIsVisible: boolean = false;
   // 添加的窗体对象
-  accessPermissionAddForm!: FormGroup;
+  accessPermissionAddForm!: UntypedFormGroup;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private accessPermissionService: AccessPermissionService,
     private router: Router,
   ) { }

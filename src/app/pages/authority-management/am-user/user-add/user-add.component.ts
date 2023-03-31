@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { UserService } from 'src/app/services/user.service';
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Observable, Observer } from 'rxjs';
 import { User } from '../../../../entities/user'
 
@@ -15,14 +15,14 @@ export class UserAddComponent implements OnInit {
   //用户对象
   user: User = new User();
   //用户表单对象
-  userAddForm!: FormGroup;
+  userAddForm!: UntypedFormGroup;
   //电话号码正则表达式
   phoneReg = /1\d{10}/;
 
   constructor(
     private modal: NzModalRef,
     private userService: UserService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
   ) {
   }
 
@@ -48,7 +48,7 @@ export class UserAddComponent implements OnInit {
   }
 
   //用户名是否存在验证
-  userNameAsyncValidator = (control: FormControl) =>
+  userNameAsyncValidator = (control: UntypedFormControl) =>
     new Observable((observer: Observer<ValidationErrors | null>) => {
       this.userService.getUserByLoginName(control.value).subscribe({
         next: (res) => {
@@ -75,7 +75,7 @@ export class UserAddComponent implements OnInit {
     });
 
   //更改密码确认时确认密码验证
-  confirmValidator = (control: FormControl): { [s: string]: boolean } => {
+  confirmValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
     } else if (control.value !== this.userAddForm.controls['password'].value) {

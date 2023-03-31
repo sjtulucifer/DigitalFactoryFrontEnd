@@ -1,6 +1,6 @@
 import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, Observer } from 'rxjs';
@@ -20,7 +20,7 @@ export class UserDetailComponent implements OnInit {
   // 用户信息
   user: User = new User();
   // 用户基本信息表单
-  userEditForm!: FormGroup;
+  userEditForm!: UntypedFormGroup;
   // 用户角色信息
   userRoleList: Role[] = [];
   // 可用角色列表
@@ -50,7 +50,7 @@ export class UserDetailComponent implements OnInit {
     private userService: UserService,
     private roleService: RoleService,
     private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private notification: NzNotificationService
   ) { }
 
@@ -158,7 +158,7 @@ export class UserDetailComponent implements OnInit {
   }
 
   //用户名是否存在验证
-  userNameAsyncValidator = (control: FormControl) =>
+  userNameAsyncValidator = (control: UntypedFormControl) =>
     new Observable((observer: Observer<ValidationErrors | null>) => {
       this.userService.getUserByLoginName(control.value).subscribe({
         next: (res) => {

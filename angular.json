@@ -108,5 +108,7 @@
       }
     }
   },
-  "defaultProject": "DigitalFactoryFrontEnd"
+  "cli": {
+    "analytics": false
+  }
 }

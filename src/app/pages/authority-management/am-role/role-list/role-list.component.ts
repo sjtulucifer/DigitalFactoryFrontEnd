@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Observer } from 'rxjs';
 import { Result } from 'src/app/entities/result';
@@ -20,10 +20,10 @@ export class RoleListComponent implements OnInit {
   // 添加的角色信息
   roleAdd: Role = new Role();
   //用户表单对象
-  roleAddForm!: FormGroup;
+  roleAddForm!: UntypedFormGroup;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private roleService: RoleService,
     private router: Router,
   ) { }
@@ -94,7 +94,7 @@ export class RoleListComponent implements OnInit {
   }
 
   //用户名是否存在验证
-  roleNameAsyncValidator = (control: FormControl) =>
+  roleNameAsyncValidator = (control: UntypedFormControl) =>
     new Observable((observer: Observer<ValidationErrors | null>) => {
       this.roleService.getRoleByName(control.value).subscribe({
         next: (res) => {

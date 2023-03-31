@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { AccessPermission } from 'src/app/entities/access-permission';
@@ -18,7 +18,7 @@ export class AccessPermissionDetailComponent implements OnInit {
   // 访问权限对象
   accessPermission: AccessPermission = new AccessPermission();
   // 访问权限表单
-  accessPermissionEditForm!: FormGroup;
+  accessPermissionEditForm!: UntypedFormGroup;
   // 目录选择框是否显示
   menuIsVisible: boolean = false;
   // 访问权限目录信息
@@ -34,7 +34,7 @@ export class AccessPermissionDetailComponent implements OnInit {
   setOfCheckedId = new Set<string>();
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     private accessPermissionService: AccessPermissionService,
     private menuService: MenuService,

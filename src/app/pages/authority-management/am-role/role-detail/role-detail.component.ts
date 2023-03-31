@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { AccessPermission } from 'src/app/entities/access-permission';
@@ -18,7 +18,7 @@ export class RoleDetailComponent implements OnInit {
   // 角色信息
   role: Role = new Role();
   // 角色基本信息表单
-  roleEditForm!: FormGroup;
+  roleEditForm!: UntypedFormGroup;
   // 角色访问权限信息
   roleAccessPermission: AccessPermission = new AccessPermission();
   // 可选访问权限列表
@@ -28,7 +28,7 @@ export class RoleDetailComponent implements OnInit {
     private roleService: RoleService,
     private accessPermissionService: AccessPermissionService,
     private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private notification: NzNotificationService
   ) { }
 

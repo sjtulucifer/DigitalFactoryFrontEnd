@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Menu } from 'src/app/entities/menu';
@@ -20,12 +20,12 @@ export class MenuListComponent implements OnInit {
   // 添加模态窗孔是否显示
   menuAddIsVisible: boolean = false;
   // 目录表单对象
-  menuAddForm!: FormGroup;
+  menuAddForm!: UntypedFormGroup;
 
   constructor(
     private menuService: MenuService,
     private router: Router,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
   ) { }
 
   ngOnInit(): void {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Result } from '../entities/result';
@@ -23,14 +23,14 @@ export class LoginComponent implements OnInit {
     'password': { 'required': '名称不能为空' }
   };
 
-  validateForm!: FormGroup;
+  validateForm!: UntypedFormGroup;
   
   userName!: string;
   password!: string;
 
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private router: Router,
     private userService: UserService,
     private notification: NzNotificationService,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Menu } from 'src/app/entities/menu';
@@ -14,14 +14,14 @@ import { MenuService } from 'src/app/services/menu.service';
 export class MenuDetailComponent implements OnInit {
 
   // 目录更新表单
-  menuUpdateForm!: FormGroup;
+  menuUpdateForm!: UntypedFormGroup;
   // 目录更新对象
   menuUpdate: Menu = new Menu();
 
   constructor(
     private menuService: MenuService,
     private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private notification: NzNotificationService,
   ) { }
 
