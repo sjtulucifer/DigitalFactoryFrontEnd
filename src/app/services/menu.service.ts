@@ -12,7 +12,7 @@ export class MenuService {
   private baseUrl: string;
 
   constructor(private $http: HttpClient) {
-    this.baseUrl = environment.webApiUrl + 'Menus/';
+    this.baseUrl = environment.webApiUrl + 'Authority/Menus/';
   }
 
   addMenu(menu: Menu): Observable<any> {

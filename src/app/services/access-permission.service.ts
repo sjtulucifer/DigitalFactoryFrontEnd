@@ -12,7 +12,7 @@ export class AccessPermissionService {
   private baseUrl: string;
 
   constructor(private $http: HttpClient) {
-    this.baseUrl = environment.webApiUrl + 'AccessPermissions/';
+    this.baseUrl = environment.webApiUrl + 'Authority/AccessPermissions/';
   }
 
   addAccessPermission(aPermission: AccessPermission): Observable<any> {

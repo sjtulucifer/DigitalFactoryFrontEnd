@@ -12,7 +12,7 @@ export class UserService {
   private baseUrl: string;
 
   constructor(private $http: HttpClient) {
-    this.baseUrl = environment.webApiUrl + 'Users/';
+    this.baseUrl = environment.webApiUrl + 'Authority/Users/';
   }
 
   addUser(user: User): Observable<any> {

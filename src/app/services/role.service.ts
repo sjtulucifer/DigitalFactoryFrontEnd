@@ -12,7 +12,7 @@ export class RoleService {
   private baseUrl: string;
 
   constructor(private $http: HttpClient) {
-    this.baseUrl = environment.webApiUrl + 'Roles/';
+    this.baseUrl = environment.webApiUrl + 'Authority/Roles/';
   }
 
   addRole(role: Role): Observable<any> {
