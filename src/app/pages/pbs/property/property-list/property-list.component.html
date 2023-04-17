@@ -1,0 +1,111 @@
+<button nz-button (click)="addProperty()" nzType="primary">添加属性</button>
+<br />
+<br />
+<nz-modal [(nzVisible)]="propertyAddIsVisible" nzTitle="添加计量类" (nzOnCancel)="propertyHandleCancel()">
+    <div *nzModalContent>
+        <form nz-form [formGroup]="propertyAddForm">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>属性代码</nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="codeErrorTpl">
+                    <input nz-input formControlName="code" [(ngModel)]="propertyAdd.PropertyCode" placeholder="属性代码" />
+                    <ng-template #codeErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">请输入属性代码!</ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>属性名称</nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="nameErrorTpl">
+                    <input nz-input formControlName="name" [(ngModel)]="propertyAdd.PropertyName" placeholder="属性名称" />
+                    <ng-template #nameErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">请输入属性名称!</ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>属性英文名</nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="unitNameErrorTpl">
+                    <input nz-input formControlName="EName" [(ngModel)]="propertyAdd.PropertyEName"
+                        placeholder="属性英文名" />
+                    <ng-template #unitNameErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">请输入属性英文名!</ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>属性类别</nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="categoryErrorTpl">
+                    <nz-select formControlName="category" [(ngModel)]="propertyAdd.PropertyCategory">
+                        <nz-option nzValue="类静态" nzLabel="类静态属性"></nz-option>
+                        <nz-option nzValue="对象静态" nzLabel="对象静态属性"></nz-option>
+                        <nz-option nzValue="运行" nzLabel="运行属性"></nz-option>
+                    </nz-select>
+                    <ng-template #categoryErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">请选择属性分类!</ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>属性数据类型</nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="typeErrorTpl">
+                    <nz-select formControlName="type" [(ngModel)]="propertyAdd.PropertyDType">
+                        <nz-option nzValue="字符" nzLabel="字符类型"></nz-option>
+                        <nz-option nzValue="数字" nzLabel="数字类型"></nz-option>
+                        <nz-option nzValue="日期" nzLabel="日期类型"></nz-option>
+                    </nz-select>
+                    <ng-template #typeErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">请选择属性数据类型!</ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>属性计量类</nz-form-label>
+                <nz-form-control [nzSpan]="12" nzValidatingTip="验证中...">
+                    <nz-select formControlName="measurement"
+                        [(ngModel)]="propertyAdd.PropertyMeasurement!.MeasurementId">
+                        <nz-option *ngFor="let measurement of measurementList" [nzValue]="measurement.MeasurementId"
+                            [nzLabel]="measurement.MeasurementUnitName!"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7">属性描述</nz-form-label>
+                <nz-form-control [nzSpan]="12">
+                    <textarea formControlName="description" nz-input rows="2"
+                        [(ngModel)]="propertyAdd.PropertyDescription" placeholder="属性描述"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+    <div *nzModalFooter>
+        <button nz-button nzType="default" (click)="propertyHandleCancel()">取消</button>
+        <button nz-button nzType="primary" (click)="propertyHandleOk()" [disabled]="!propertyAddForm.valid">确定</button>
+    </div>
+</nz-modal>
+
+<nz-table #propertyListTable [nzData]="propertyList">
+    <thead>
+        <tr>
+            <th>属性代码</th>
+            <th>属性中文名</th>
+            <th>属性英文名</th>
+            <th>属性类别</th>
+            <th>属性数据类型</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of propertyListTable.data">
+            <td>{{data.PropertyCode}}</td>
+            <td>{{data.PropertyName}}</td>
+            <td>{{data.PropertyEName}}</td>
+            <td>{{data.PropertyCategory}}</td>
+            <td>{{data.PropertyDType}}</td>
+            <td>
+                <a (click)="editProperty(data.PropertyId!)">编辑</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a nz-popconfirm nzPopconfirmTitle="确认删除该属性吗?" (nzOnConfirm)="deleteProperty(data.PropertyId!)">删除</a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

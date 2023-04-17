@@ -1,0 +1,85 @@
+<nz-card>
+    <nz-card-tab>
+        <nz-tabset nzType="card">
+            <nz-tab nzTitle="属性信息">                
+                <form nz-form [formGroup]="propertyUpdateForm" (ngSubmit)="UpdatePropertyDetail()">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>属性代码</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="codeErrorTpl">
+                            <input nz-input formControlName="code" [(ngModel)]="propertyUpdate.PropertyCode" placeholder="属性代码" />
+                            <ng-template #codeErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">请输入属性代码!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>属性名称</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="nameErrorTpl">
+                            <input nz-input formControlName="name" [(ngModel)]="propertyUpdate.PropertyName" placeholder="属性名称" />
+                            <ng-template #nameErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">请输入属性名称!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>属性英文名</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="unitNameErrorTpl">
+                            <input nz-input formControlName="EName" [(ngModel)]="propertyUpdate.PropertyEName" placeholder="属性英文名" />
+                            <ng-template #unitNameErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">请输入属性英文名!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>属性类别</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="categoryErrorTpl">
+                            <nz-select formControlName="category" [(ngModel)]="propertyUpdate.PropertyCategory">
+                                <nz-option nzValue="类静态" nzLabel="类静态属性"></nz-option>
+                                <nz-option nzValue="对象静态" nzLabel="对象静态属性"></nz-option>
+                                <nz-option nzValue="运行" nzLabel="运行属性"></nz-option>
+                            </nz-select>
+                            <ng-template #categoryErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">请选择属性分类!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>属性数据类型</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="typeErrorTpl">
+                            <nz-select formControlName="type" [(ngModel)]="propertyUpdate.PropertyDType">
+                                <nz-option nzValue="字符" nzLabel="字符类型"></nz-option>
+                                <nz-option nzValue="数字" nzLabel="数字类型"></nz-option>
+                                <nz-option nzValue="日期" nzLabel="日期类型"></nz-option>
+                            </nz-select>
+                            <ng-template #typeErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">请选择属性数据类型!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>属性计量类</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzValidatingTip="验证中...">
+                            <nz-select formControlName="measurement"
+                                [(ngModel)]="propertyMeasurement.MeasurementId">
+                                <nz-option *ngFor="let measurement of measurementList" [nzValue]="measurement.MeasurementId"
+                                    [nzLabel]="measurement.MeasurementUnitName!"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7">属性描述</nz-form-label>
+                        <nz-form-control [nzSpan]="12">
+                            <textarea formControlName="description" nz-input rows="2" [(ngModel)]="propertyUpdate.PropertyDescription"
+                                placeholder="属性描述"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                            <button nz-button nzType="primary" [disabled]="!propertyUpdateForm.valid">保存</button>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-tab>
+        </nz-tabset>
+    </nz-card-tab>
+</nz-card>

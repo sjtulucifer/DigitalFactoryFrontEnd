@@ -1,0 +1,70 @@
+<button nz-button (click)="addMeasurement()" nzType="primary">添加计量类</button>
+<br />
+<br />
+<nz-modal [(nzVisible)]="measurementAddIsVisible" nzTitle="添加计量类" (nzOnCancel)="measurementHandleCancel()">
+    <div *nzModalContent>
+        <form nz-form [formGroup]="measurementAddForm">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>计量类代码</nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="codeErrorTpl">
+                    <input nz-input formControlName="code" [(ngModel)]="measurementAdd.MeasurementCode" placeholder="计量类代码" />
+                    <ng-template #codeErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">请输入计量类代码!</ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>计量类名称</nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="nameErrorTpl">
+                    <input nz-input formControlName="name" [(ngModel)]="measurementAdd.MeasurementName" placeholder="计量类名称" />
+                    <ng-template #nameErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">请输入计量类名称!</ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>计量类单位名称</nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..." [nzErrorTip]="unitNameErrorTpl">
+                    <input nz-input formControlName="unitName" [(ngModel)]="measurementAdd.MeasurementUnitName" placeholder="计量类单位名称" />
+                    <ng-template #unitNameErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">请输入计量类单位名!</ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7">计量类描述</nz-form-label>
+                <nz-form-control [nzSpan]="12">
+                    <textarea formControlName="description" nz-input rows="2" [(ngModel)]="measurementAdd.MeasurementDescription"
+                        placeholder="计量类描述"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+    <div *nzModalFooter>
+        <button nz-button nzType="default" (click)="measurementHandleCancel()">取消</button>
+        <button nz-button nzType="primary" (click)="measurementHandleOk()" [disabled]="!measurementAddForm.valid">确定</button>
+    </div>
+</nz-modal>
+
+<nz-table #measurementListTable [nzData]="measurementList">
+    <thead>
+        <tr>
+            <th>计量类代码</th>
+            <th>计量类名称</th>
+            <th>计量类单位名称</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of measurementListTable.data">
+            <td>{{data.MeasurementCode}}</td>
+            <td>{{data.MeasurementName}}</td>
+            <td>{{data.MeasurementUnitName}}</td>
+            <td>
+                <a (click)="editMeasurement(data.MeasurementId!)">编辑</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a nz-popconfirm nzPopconfirmTitle="确认删除该计量类吗?" (nzOnConfirm)="deleteMeasurement(data.MeasurementId!)">删除</a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

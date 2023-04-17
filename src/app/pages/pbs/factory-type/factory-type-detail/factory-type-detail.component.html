@@ -1,0 +1,208 @@
+<br>
+<nz-card [nzTitle]="factoryTypeUpdate!.FactoryTypeCode">
+    <nz-card-tab>
+        <nz-tabset nzType="card">
+            <nz-modal [(nzVisible)]="propertyAddIsVisible" nzTitle="属性选择" (nzOnCancel)="propertyAddHandleCancel()">
+                <div *nzModalContent>
+                    <nz-table #propertyListTable [nzData]="propertyAddList" [nzFrontPagination]="false">
+                        <thead>
+                            <tr>
+                                <th [nzChecked]="checked" [nzIndeterminate]="indeterminate"
+                                    (nzCheckedChange)="onAllChecked($event)"></th>
+                                <th>属性中文名</th>
+                                <th>属性英文名</th>
+                                <th>属性数据类型</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of propertyListTable.data">
+                                <td [nzChecked]="setOfCheckedId.has(data.PropertyId!)"
+                                    (nzCheckedChange)="onItemChecked(data.PropertyId!, $event)"></td>
+                                <td>{{data.PropertyName}}</td>
+                                <td>{{data.PropertyEName}}</td>
+                                <td>{{data.PropertyDType}}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+                <div *nzModalFooter>
+                    <button nz-button nzType="default" (click)="propertyAddHandleCancel()">取消</button>
+                    <button nz-button nzType="primary" [disabled]="setOfCheckedId.size===0"
+                        (click)="propertyAddHandleOk()">确定</button>
+                </div>
+            </nz-modal>
+            <nz-tab nzTitle="基本信息">
+                <form nz-form [formGroup]="factoryTypeUpdateForm" (ngSubmit)="UpdateFactoryTypeDetail()">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>工厂对象类名称</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..."
+                            [nzErrorTip]="nameErrorTpl">
+                            <input nz-input formControlName="name" [(ngModel)]="factoryTypeUpdate.FactoryTypeName"
+                                placeholder="工厂对象类名称" />
+                            <ng-template #nameErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">请输入工厂对象类名称!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7">工厂对象类父类</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..."
+                            [nzErrorTip]="nameErrorTpl">
+                            <nz-tree-select formControlName="father" [nzNodes]="nodes" nzShowSearch
+                                nzPlaceHolder="请选择父类" [(ngModel)]="fatherFactoryType.FactoryTypeId"
+                                (ngModelChange)="fatherTypeOnChange($event)"></nz-tree-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7">工厂对象类描述</nz-form-label>
+                        <nz-form-control [nzSpan]="12">
+                            <textarea formControlName="description" nz-input rows="2"
+                                [(ngModel)]="factoryTypeUpdate.FactoryTypeDescription" placeholder="工厂对象类描述"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                            <button nz-button nzType="primary" [disabled]="!factoryTypeUpdateForm.valid">保存</button>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-tab>
+            <nz-tab #type nzTitle="类静态属性">
+                <nz-modal [(nzVisible)]="propertyValueUpdateIsVisible" nzTitle="更新属性值" (nzOnCancel)="propertyValueUpdateHandleCancel()">
+                    <div *nzModalContent>
+                        <form nz-form [formGroup]="propertyValueUpdateForm">
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7">属性名</nz-form-label>
+                                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中...">
+                                    <input nz-input formControlName="name" [(ngModel)]="this.propertyValueUpdate.PropertyName" placeholder="属性名" />
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7">属性数据类型</nz-form-label>
+                                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中...">
+                                    <input nz-input formControlName="dType" [(ngModel)]="this.propertyValueUpdate.PropertyDType"  placeholder="属性数据类型" />
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7">属性值</nz-form-label>
+                                <nz-form-control [nzSpan]="12">
+                                    <textarea formControlName="value" nz-input rows="2"
+                                        [(ngModel)]="this.propertyValueUpdate.PropertyValue"
+                                        placeholder="属性值"></textarea>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7">单位</nz-form-label>
+                                <nz-form-control [nzSpan]="12">
+                                    <input nz-input formControlName="unitName" [(ngModel)]="this.propertyValueUpdateMeasurement.MeasurementUnitName" placeholder="单位" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </form>
+                    </div>
+                    <div *nzModalFooter>
+                        <button nz-button nzType="default" (click)="propertyValueUpdateHandleCancel()">取消</button>
+                        <button nz-button nzType="primary" [disabled]="!factoryTypeUpdateForm.valid"(click)="propertyValueUpdateHandleOk()">确定</button>
+                    </div>
+                </nz-modal>
+                <button nz-button (click)="addProperty(type.nzTitle.toString())" nzType="primary">添加属性</button>
+                <br>
+                <br>
+                <nz-table #typePropertyListTable [nzData]="typePropertyList" nzBordered="true">
+                    <thead>
+                        <tr>
+                            <th>属性代码</th>
+                            <th>属性中文名</th>
+                            <th>属性英文名</th>
+                            <th>属性类别</th>
+                            <th>属性数据类型</th>
+                            <th>属性值</th>
+                            <th>属性单位</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of typePropertyListTable.data">
+                            <td>{{data.PropertyCode}}</td>
+                            <td>{{data.PropertyName}}</td>
+                            <td>{{data.PropertyEName}}</td>
+                            <td>{{data.PropertyCategory}}</td>
+                            <td>{{data.PropertyDType}}</td>
+                            <td>{{data.PropertyValue}}</td>
+                            <td>{{data.PropertyMeasurement?.MeasurementUnitName}}</td>
+                            <td>
+                                <a (click)="editProperty(data.PropertyId!)">编辑</a>
+                                <nz-divider nzType="vertical"></nz-divider>
+                                <a nz-popconfirm nzPopconfirmTitle="确认删除该属性吗?"
+                                    (nzOnConfirm)="deleteProperty(data.PropertyId!)">删除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-tab>
+            <nz-tab #object nzTitle="对象静态属性">
+                <nz-space>
+                    <button *nzSpaceItem nz-button (click)="addProperty(object.nzTitle.toString())"
+                        nzType="primary">添加属性</button>
+                    <button *nzSpaceItem nz-button (click)="synchronizeObject()" nzType="primary">同步工厂对象属性</button>
+                </nz-space>
+                <br>
+                <br>
+                <nz-table #objectPropertyListTable [nzData]="objectPropertyList" nzBordered="true">
+                    <thead>
+                        <tr>
+                            <th>属性代码</th>
+                            <th>属性中文名</th>
+                            <th>属性英文名</th>
+                            <th>属性类别</th>
+                            <th>属性数据类型</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of objectPropertyListTable.data">
+                            <td>{{data.PropertyCode}}</td>
+                            <td>{{data.PropertyName}}</td>
+                            <td>{{data.PropertyEName}}</td>
+                            <td>{{data.PropertyCategory}}</td>
+                            <td>{{data.PropertyDType}}</td>
+                            <td>
+                                <a nz-popconfirm nzPopconfirmTitle="确认删除该属性吗?"
+                                    (nzOnConfirm)="deleteProperty(data.PropertyId!)">删除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-tab>
+            <nz-tab #run nzTitle="运行属性">
+                <button nz-button (click)="addProperty(run.nzTitle.toString())" nzType="primary">添加属性</button>
+                <br>
+                <br>
+                <nz-table #runPropertyListTable [nzData]="runPropertyList" nzBordered="true">
+                    <thead>
+                        <tr>
+                            <th>属性代码</th>
+                            <th>属性中文名</th>
+                            <th>属性英文名</th>
+                            <th>属性类别</th>
+                            <th>属性数据类型</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of runPropertyListTable.data">
+                            <td>{{data.PropertyCode}}</td>
+                            <td>{{data.PropertyName}}</td>
+                            <td>{{data.PropertyEName}}</td>
+                            <td>{{data.PropertyCategory}}</td>
+                            <td>{{data.PropertyDType}}</td>
+                            <td>
+                                <a nz-popconfirm nzPopconfirmTitle="确认删除该属性吗?"
+                                    (nzOnConfirm)="deleteProperty(data.PropertyId!)">删除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-tab>
+        </nz-tabset>
+    </nz-card-tab>
+</nz-card>

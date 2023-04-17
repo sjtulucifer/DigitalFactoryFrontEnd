@@ -17,7 +17,7 @@ export class MenuListComponent implements OnInit {
   menuList: Menu[] = [];
   // 需要添加的目录对象
   menuAdd: Menu = new Menu();
-  // 添加模态窗孔是否显示
+  // 添加模态窗口是否显示
   menuAddIsVisible: boolean = false;
   // 目录表单对象
   menuAddForm!: UntypedFormGroup;
@@ -54,7 +54,7 @@ export class MenuListComponent implements OnInit {
       next: (res) => {
         res = res as Result;
         if (0 == res.Code) {
-          this.menuAdd = res.Result as Menu;
+          //this.menuAdd = res.Result as Menu;
           this.menuList = this.menuList.filter(item => id !== item.MenuId);
         }
       },

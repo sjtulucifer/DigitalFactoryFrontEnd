@@ -103,12 +103,12 @@ export class PagesComponent implements OnInit {
         // 设置图标
 
         if (element.MenuCategory === '其他') {
-          temp.icon = 'home';
-        } else if (element.MenuCategory === '权限管理') {
           temp.icon = 'form';
-        } /*else if (element.MenuCategory === '实时状态') {
-          temp.icon = 'nb-location';
-        } else if (element.MenuCategory === '增值服务') {
+        } else if (element.MenuCategory === '权限管理') {
+          temp.icon = 'setting';
+        } else if (element.MenuCategory === '工厂分解') {
+          temp.icon = 'home';
+        } /*else if (element.MenuCategory === '增值服务') {
           temp.icon = 'nb-compose';
         }
         */

@@ -1,0 +1,49 @@
+<nz-card>
+    <nz-card-tab>
+        <nz-tabset nzType="card">
+            <nz-tab nzTitle="计量类信息">                
+                <form nz-form [formGroup]="measurementUpdateForm" (ngSubmit)="UpdateMeasurementDetail()">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7">计量类代码</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback>
+                            <input nz-input formControlName="code" [(ngModel)]="measurementUpdate.MeasurementCode"/>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>计量类名称</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..."
+                            [nzErrorTip]="nameErrorTpl">
+                            <input nz-input formControlName="name" [(ngModel)]="measurementUpdate.MeasurementName"
+                                placeholder="请输入计量类名称" />
+                            <ng-template #nameErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">请输入计量类名称!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>计量类单位名称</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..."
+                            [nzErrorTip]="unitNameErrorTpl">
+                            <input nz-input formControlName="unitName" [(ngModel)]="measurementUpdate.MeasurementUnitName" placeholder="计量类单位名称" />
+                            <ng-template #unitNameErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">请输入计量类单位名称!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7">计量类描述</nz-form-label>
+                        <nz-form-control [nzSpan]="12">
+                            <textarea formControlName="description" nz-input rows="2"
+                                [(ngModel)]="measurementUpdate.MeasurementDescription" placeholder="计量类描述"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                            <button nz-button nzType="primary" [disabled]="!measurementUpdateForm.valid">保存</button>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-tab>
+        </nz-tabset>
+    </nz-card-tab>
+</nz-card>

@@ -5,6 +5,7 @@ const routes: Routes = [
   { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
   { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomeModule) },
   { path: 'authority', loadChildren: () => import('./pages/authority-management/authority-management.module').then(m => m.AuthorityManagementModule) },
+  { path: 'pbs', loadChildren: () => import('./pages/pbs/pbs.module').then(m => m.PBSModule) },
   { path: '', pathMatch: 'full', redirectTo: 'login' },
 ];
 

@@ -31,7 +31,6 @@ import { MenuDetailComponent } from './am-menu/menu-detail/menu-detail.component
 import { AccessPermissionListComponent } from './am-access-permission/access-permission-list/access-permission-list.component';
 import { AccessPermissionDetailComponent } from './am-access-permission/access-permission-detail/access-permission-detail.component';
 import { PagesModule } from '../pages.module';
-import { NzInputModule } from 'ng-zorro-antd/input';
 
 @NgModule({
   declarations: [

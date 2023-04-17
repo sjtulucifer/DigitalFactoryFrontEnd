@@ -9,6 +9,7 @@
                             [nzErrorTip]="categoryErrorTpl">
                             <nz-select formControlName="category" [(ngModel)]="menuUpdate.MenuCategory">
                                 <nz-option nzValue="权限管理" nzLabel="权限管理"></nz-option>
+                                <nz-option nzValue="工厂分解" nzLabel="工厂分解"></nz-option>
                                 <nz-option nzValue="其他" nzLabel="其他"></nz-option>
                             </nz-select>
                             <ng-template #categoryErrorTpl let-control>
@@ -53,3 +54,4 @@
             </nz-tab>
         </nz-tabset>
     </nz-card-tab>
+</nz-card>
