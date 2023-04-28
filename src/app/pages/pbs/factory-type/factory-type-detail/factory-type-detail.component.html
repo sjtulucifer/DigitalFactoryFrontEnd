@@ -1,4 +1,3 @@
-<br>
 <nz-card [nzTitle]="factoryTypeUpdate!.FactoryTypeCode">
     <nz-card-tab>
         <nz-tabset nzType="card">
@@ -68,40 +67,70 @@
                 </form>
             </nz-tab>
             <nz-tab #type nzTitle="类静态属性">
-                <nz-modal [(nzVisible)]="propertyValueUpdateIsVisible" nzTitle="更新属性值" (nzOnCancel)="propertyValueUpdateHandleCancel()">
+                <nz-modal [(nzVisible)]="propertyValueUpdateIsVisible" nzTitle="更新属性值"
+                    (nzOnCancel)="propertyValueUpdateHandleCancel()">
                     <div *nzModalContent>
                         <form nz-form [formGroup]="propertyValueUpdateForm">
                             <nz-form-item>
                                 <nz-form-label [nzSpan]="7">属性名</nz-form-label>
                                 <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中...">
-                                    <input nz-input formControlName="name" [(ngModel)]="this.propertyValueUpdate.PropertyName" placeholder="属性名" />
+                                    <input nz-input formControlName="name"
+                                        [(ngModel)]="this.propertyValueUpdate.PropertyName" placeholder="属性名" />
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label [nzSpan]="7">属性数据类型</nz-form-label>
                                 <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中...">
-                                    <input nz-input formControlName="dType" [(ngModel)]="this.propertyValueUpdate.PropertyDType"  placeholder="属性数据类型" />
+                                    <input nz-input formControlName="dType"
+                                        [(ngModel)]="this.propertyValueUpdate.PropertyDType" placeholder="属性数据类型" />
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label [nzSpan]="7">属性值</nz-form-label>
-                                <nz-form-control [nzSpan]="12">
-                                    <textarea formControlName="value" nz-input rows="2"
-                                        [(ngModel)]="this.propertyValueUpdate.PropertyValue"
-                                        placeholder="属性值"></textarea>
-                                </nz-form-control>
+                                <div *ngIf="propertyValueUpdate.PropertyDType==='数字'">
+                                    <nz-form-control [nzSpan]="12" [nzErrorTip]="valueErrorTpl">
+                                        <input nz-input formControlName="value" pattern="^\d+(\.\d{1,})$|(^[1-9]\d*$)"
+                                            required [(ngModel)]="propertyValueUpdate.PropertyValue"
+                                            placeholder="属性值" />
+                                        <ng-template #valueErrorTpl let-control>
+                                            <ng-container *ngIf="control.hasError('required')">请输入属性值!</ng-container>
+                                            <ng-container *ngIf="control.hasError('pattern')">请输入数字!</ng-container>
+                                        </ng-template>
+                                    </nz-form-control>
+                                </div>
+                                <div *ngIf="propertyValueUpdate.PropertyDType==='字符'">
+                                    <nz-form-control [nzSpan]="12" [nzErrorTip]="valueErrorTpl">
+                                        <input nz-input formControlName="value" required
+                                            [(ngModel)]="propertyValueUpdate.PropertyValue" placeholder="属性值" />
+                                        <ng-template #valueErrorTpl let-control>
+                                            <ng-container *ngIf="control.hasError('required')">请输入属性值!</ng-container>
+                                        </ng-template>
+                                    </nz-form-control>
+                                </div>
+                                <div *ngIf="propertyValueUpdate.PropertyDType==='日期'">
+                                    <nz-form-control [nzSpan]="12" [nzErrorTip]="valueErrorTpl">
+                                        <nz-date-picker formControlName="value" nzMode="date"
+                                            [(ngModel)]="propertyValueUpdate.PropertyValue" required></nz-date-picker>
+                                        <ng-template #valueErrorTpl let-control>
+                                            <ng-container *ngIf="control.hasError('required')">请输入属性值!</ng-container>                                            
+                                        </ng-template>
+                                    </nz-form-control>
+                                </div>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label [nzSpan]="7">单位</nz-form-label>
                                 <nz-form-control [nzSpan]="12">
-                                    <input nz-input formControlName="unitName" [(ngModel)]="this.propertyValueUpdateMeasurement.MeasurementUnitName" placeholder="单位" />
+                                    <input nz-input formControlName="unitName"
+                                        [(ngModel)]="this.propertyValueUpdateMeasurement.MeasurementUnitName"
+                                        placeholder="单位" />
                                 </nz-form-control>
                             </nz-form-item>
                         </form>
                     </div>
                     <div *nzModalFooter>
                         <button nz-button nzType="default" (click)="propertyValueUpdateHandleCancel()">取消</button>
-                        <button nz-button nzType="primary" [disabled]="!factoryTypeUpdateForm.valid"(click)="propertyValueUpdateHandleOk()">确定</button>
+                        <button nz-button nzType="primary" [disabled]="!propertyValueUpdateForm.valid"
+                            (click)="propertyValueUpdateHandleOk()">确定</button>
                     </div>
                 </nz-modal>
                 <button nz-button (click)="addProperty(type.nzTitle.toString())" nzType="primary">添加属性</button>
@@ -143,7 +172,7 @@
                 <nz-space>
                     <button *nzSpaceItem nz-button (click)="addProperty(object.nzTitle.toString())"
                         nzType="primary">添加属性</button>
-                    <button *nzSpaceItem nz-button (click)="synchronizeObject()" nzType="primary">同步工厂对象属性</button>
+                    <button *nzSpaceItem nz-button nz-popconfirm nzPopconfirmTitle="确认同步吗?" (nzOnConfirm)="synchronizeObject()" nzType="primary">同步非类静态属性</button>
                 </nz-space>
                 <br>
                 <br>
@@ -155,7 +184,9 @@
                             <th>属性英文名</th>
                             <th>属性类别</th>
                             <th>属性数据类型</th>
+                            <!--
                             <th>操作</th>
+                            -->                            
                         </tr>
                     </thead>
                     <tbody>
@@ -165,16 +196,21 @@
                             <td>{{data.PropertyEName}}</td>
                             <td>{{data.PropertyCategory}}</td>
                             <td>{{data.PropertyDType}}</td>
+                            <!--
                             <td>
                                 <a nz-popconfirm nzPopconfirmTitle="确认删除该属性吗?"
                                     (nzOnConfirm)="deleteProperty(data.PropertyId!)">删除</a>
                             </td>
+                            -->
                         </tr>
                     </tbody>
                 </nz-table>
             </nz-tab>
             <nz-tab #run nzTitle="运行属性">
-                <button nz-button (click)="addProperty(run.nzTitle.toString())" nzType="primary">添加属性</button>
+                <nz-space>
+                    <button *nzSpaceItem nz-button nz-button (click)="addProperty(run.nzTitle.toString())" nzType="primary">添加属性</button>
+                    <button *nzSpaceItem nz-button nz-popconfirm nzPopconfirmTitle="确认同步吗?" (nzOnConfirm)="synchronizeObject()" nzType="primary">同步非类静态属性</button>
+                </nz-space>
                 <br>
                 <br>
                 <nz-table #runPropertyListTable [nzData]="runPropertyList" nzBordered="true">
@@ -185,7 +221,10 @@
                             <th>属性英文名</th>
                             <th>属性类别</th>
                             <th>属性数据类型</th>
+                            <!--
                             <th>操作</th>
+                            -->
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -195,10 +234,12 @@
                             <td>{{data.PropertyEName}}</td>
                             <td>{{data.PropertyCategory}}</td>
                             <td>{{data.PropertyDType}}</td>
+                            <!--
                             <td>
                                 <a nz-popconfirm nzPopconfirmTitle="确认删除该属性吗?"
                                     (nzOnConfirm)="deleteProperty(data.PropertyId!)">删除</a>
-                            </td>
+                            </td>                                                            
+                            -->
                         </tr>
                     </tbody>
                 </nz-table>

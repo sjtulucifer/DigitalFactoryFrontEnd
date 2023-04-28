@@ -16,11 +16,6 @@ import { PropertyService } from 'src/app/services/property.service';
   styleUrls: ['./factory-type-detail.component.css']
 })
 export class FactoryTypeDetailComponent implements OnInit {
-  
-  
-  synchronizeObject() {
-    throw new Error('Method not implemented.');
-  }
 
   // 所有属性列表
   propertyList: Property[] = [];
@@ -90,22 +85,7 @@ export class FactoryTypeDetailComponent implements OnInit {
     });
     // 获取指定工厂对象类信息
     let id = this.route.snapshot.params["id"];
-    this.updatePropertyList(id);
-
-    this.factoryTypeService.getFactoryTypeListWithFatherType().subscribe({
-      next: (res) => {
-        if (0 == res.Code) {
-          let factoryTypeList: FactoryType[] = res.Result as FactoryType[];
-          this.nodes = this.convertTree(factoryTypeList);
-        }
-      },
-      error: (error) => {
-        console.error(error);
-      },
-      complete: () => {
-        // console.info('complete')
-      }
-    });
+    this.refreshFactoryTypeDetail(id);
   }
 
   fatherTypeOnChange($event: any): void {
@@ -203,11 +183,11 @@ export class FactoryTypeDetailComponent implements OnInit {
   }
 
   propertyAddHandleOk() {
-    console.log(this.setOfCheckedId);
+    // console.log(this.setOfCheckedId);
     this.factoryTypeService.addFactoryTypePropertyList(this.factoryTypeUpdate.FactoryTypeId!, Array.from(this.setOfCheckedId)).subscribe({
       next: (res) => {
         if (0 == res.Code) {
-          this.updatePropertyList(this.factoryTypeUpdate.FactoryTypeId!);
+          this.refreshFactoryTypeDetail(this.factoryTypeUpdate.FactoryTypeId!);
           this.setOfCheckedId.clear();
           this.checked = false;
           this.propertyAddList = [];
@@ -224,10 +204,10 @@ export class FactoryTypeDetailComponent implements OnInit {
   }
 
   editProperty(id: string) {
-    this.propertyValueUpdateIsVisible = true;
-    this.factoryTypeService.getFactoryTypePropertyById(this.factoryTypeUpdate.FactoryTypeId!,id).subscribe({
+    this.factoryTypeService.getFactoryTypePropertyById(this.factoryTypeUpdate.FactoryTypeId!, id).subscribe({
       next: (res) => {
         if (0 == res.Code) {
+          this.propertyValueUpdateIsVisible = true;
           this.propertyValueUpdate = res.Result as Property;
           this.propertyValueUpdateMeasurement = this.propertyValueUpdate.PropertyMeasurement!;
         }
@@ -245,7 +225,10 @@ export class FactoryTypeDetailComponent implements OnInit {
     this.propertyValueUpdateIsVisible = false;
     this.propertyValueUpdate = new Property();
     this.propertyValueUpdateMeasurement = new Measurement();
+    this.propertyValueUpdateForm.reset();
+    // this.updatePropertyList(this.factoryTypeUpdate.FactoryTypeId!);
   }
+
   propertyValueUpdateHandleOk() {
     this.factoryTypeService.updateFactoryTypeProperty(this.factoryTypeUpdate.FactoryTypeId!, this.propertyValueUpdate.PropertyId!, this.propertyValueUpdate).subscribe({
       next: (res) => {
@@ -253,7 +236,8 @@ export class FactoryTypeDetailComponent implements OnInit {
           this.propertyValueUpdate = new Property();
           this.propertyValueUpdateMeasurement = new Measurement();
           this.propertyValueUpdateIsVisible = false;
-          this.updatePropertyList(this.factoryTypeUpdate.FactoryTypeId!);
+          this.propertyValueUpdateForm.reset();
+          this.refreshFactoryTypeDetail(this.factoryTypeUpdate.FactoryTypeId!);
         }
       },
       error: (error) => {
@@ -270,7 +254,7 @@ export class FactoryTypeDetailComponent implements OnInit {
       next: (res) => {
         // 如果删除成功
         if (0 == res.Code) {
-          this.updatePropertyList(this.factoryTypeUpdate.FactoryTypeId!);
+          this.refreshFactoryTypeDetail(this.factoryTypeUpdate.FactoryTypeId!);
         }
       },
       error: (error) => {
@@ -282,7 +266,30 @@ export class FactoryTypeDetailComponent implements OnInit {
     });
   }
 
+  synchronizeObject(): void {
+    var propertyIdList: string[] = [];
+    // 同步非类静态属性    
+    this.objectPropertyList.forEach(item => propertyIdList.push(item.PropertyId!));
+    this.runPropertyList.forEach(item => propertyIdList.push(item.PropertyId!));
 
+    this.factoryTypeService.synchronizeFactoryObjectPropertyList(this.factoryTypeUpdate.FactoryTypeId!, propertyIdList).subscribe({
+      next: (res) => {
+        if (0 == res.Code) {
+          this.refreshFactoryTypeDetail(this.factoryTypeUpdate.FactoryTypeId!);
+          this.setOfCheckedId.clear();
+          this.checked = false;
+          this.propertyAddList = [];
+          this.propertyAddIsVisible = false;
+        }
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        // console.info('complete')
+      }
+    });
+  }
 
   // 初始化属性添加表单
   private initForm(): void {
@@ -296,7 +303,7 @@ export class FactoryTypeDetailComponent implements OnInit {
       name: { value: this.propertyValueUpdate.PropertyName, disabled: true },
       dType: { value: this.propertyValueUpdate.PropertyDType, disabled: true },
       value: [],
-      unitName: { value: this.propertyValueUpdate.PropertyMeasurement?.MeasurementUnitName, disabled: true }
+      unitName: { value: this.propertyValueUpdateMeasurement.MeasurementUnitName, disabled: true }
     });
   }
 
@@ -329,13 +336,31 @@ export class FactoryTypeDetailComponent implements OnInit {
     return result;
   }
 
-  // 更新工厂对象所有信息和属性列表
-  private updatePropertyList(id: string): void {
+  // 更新工厂对象类所有信息和属性列表
+  private refreshFactoryTypeDetail(id: string): void {
     this.factoryTypeService.getFactoryTypeWithFatherTypeAndPropertyListById(id).subscribe({
       next: (res) => {
         res = res as Result;
         if (0 === res.Code) {
           this.factoryTypeUpdate = res.Result as FactoryType;
+          // 去除自身
+          this.factoryTypeService.getFactoryTypeListWithFatherType().subscribe({
+            next: (res) => {
+              if (0 == res.Code) {
+                let factoryTypeList: FactoryType[] = res.Result as FactoryType[];
+                // 父类型选择不能为自己
+                factoryTypeList = factoryTypeList.filter(i => i.FactoryTypeId !== this.factoryTypeUpdate.FactoryTypeId);
+                this.nodes = this.convertTree(factoryTypeList);
+              }
+            },
+            error: (error) => {
+              console.error(error);
+            },
+            complete: () => {
+              // console.info('complete')
+            }
+          });
+
           if (this.factoryTypeUpdate.FatherType !== null) {
             this.fatherFactoryType = this.factoryTypeUpdate.FatherType as FactoryType;
           }

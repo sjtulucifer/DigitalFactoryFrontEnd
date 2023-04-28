@@ -44,20 +44,7 @@ export class FactoryTypeTreeComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.factoryTypeService.getFactoryTypeListWithFatherType().subscribe({
-      next: (res) => {
-        if (0 == res.Code) {
-          let factoryTypeList: FactoryType[] = res.Result as FactoryType[];
-          this.nodes = this.convertTree(factoryTypeList);
-        }
-      },
-      error: (error) => {
-        console.error(error);
-      },
-      complete: () => {
-        // console.info('complete')
-      }
-    });
+    this.initFactoryTypeTree();
   }
 
   nzEvent(event: NzFormatEmitEvent): void {
@@ -89,7 +76,7 @@ export class FactoryTypeTreeComponent implements OnInit {
       this.objectPropertyList = [];
       this.runPropertyList = [];
     }
-    console.log(event);
+    // console.log(event);
   }
 
   deleteFactoryType(): void {
@@ -98,22 +85,7 @@ export class FactoryTypeTreeComponent implements OnInit {
         res = res as Result;
         if (0 == res.Code) {
           this.selectedFactoryType = new FactoryType();
-          // 删除以后重新查找工厂对象类
-          this.factoryTypeService.getFactoryTypeListWithFatherType().subscribe({
-            next: (res) => {
-              res = res as Result;
-              if (0 == res.Code) {
-                let factoryTypeList: FactoryType[] = res.Result as FactoryType[];
-                this.nodes = this.convertTree(factoryTypeList);
-              }
-            },
-            error: (error) => {
-              console.error(error);
-            },
-            complete: () => {
-              // console.info('complete')
-            }
-          });
+          this.initFactoryTypeTree();
         }
       },
       error: (error) => {
@@ -138,21 +110,7 @@ export class FactoryTypeTreeComponent implements OnInit {
           //重置添加的工厂对象类
           this.factoryTypeAdd = new FactoryType();
           this.factoryTypeAddForm.reset();
-          //重新赋值nodes
-          this.factoryTypeService.getFactoryTypeListWithFatherType().subscribe({
-            next: (res) => {
-              if (0 == res.Code) {
-                let factoryTypeList: FactoryType[] = res.Result as FactoryType[];
-                this.nodes = this.convertTree(factoryTypeList);
-              }
-            },
-            error: (error) => {
-              console.error(error);
-            },
-            complete: () => {
-              // console.info('complete')
-            }
-          });
+          this.initFactoryTypeTree();
         }
       },
       error: (error) => {
@@ -175,7 +133,7 @@ export class FactoryTypeTreeComponent implements OnInit {
     this.router.navigate(['pbs/factoryType/factoryTypeDetail', id]);
   }
 
-  // 初始化属性添加表单
+  // 初始化工厂对象类添加表单
   private initForm(): void {
     this.factoryTypeAddForm = this.fb.group({
       code: ['', [Validators.required]],
@@ -213,5 +171,23 @@ export class FactoryTypeTreeComponent implements OnInit {
       }
     }
     return result;
+  }
+
+  private initFactoryTypeTree(): void {
+    //重新赋值nodes
+    this.factoryTypeService.getFactoryTypeListWithFatherType().subscribe({
+      next: (res) => {
+        if (0 == res.Code) {
+          let factoryTypeList: FactoryType[] = res.Result as FactoryType[];
+          this.nodes = this.convertTree(factoryTypeList);
+        }
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        // console.info('complete')
+      }
+    });
   }
 }

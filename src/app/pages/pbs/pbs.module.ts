@@ -32,6 +32,11 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { FactoryListComponent } from './factory/factory-list/factory-list.component';
+import { FactoryDetailComponent } from './factory/factory-detail/factory-detail.component';
+import { FactoryObjectTreeComponent } from './factory-object/factory-object-tree/factory-object-tree.component';
+import { FactoryObjectDetailComponent } from './factory-object/factory-object-detail/factory-object-detail.component';
 
 @NgModule({
     declarations: [
@@ -48,7 +53,11 @@ import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
         PropertyListComponent,
         PropertyDetailComponent,
         FactoryTypeTreeComponent,
-        FactoryTypeDetailComponent
+        FactoryTypeDetailComponent,
+        FactoryListComponent,
+        FactoryDetailComponent,
+        FactoryObjectTreeComponent,
+        FactoryObjectDetailComponent
     ],
     imports: [
         CommonModule,
@@ -69,7 +78,8 @@ import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
         NzInputModule,
         NzGridModule,
         NzSpaceModule,
-        NzTreeSelectModule
+        NzTreeSelectModule,
+        NzDatePickerModule,
     ]
 })
 export class PBSModule { }

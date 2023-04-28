@@ -1,7 +1,7 @@
 <button nz-button (click)="addProperty()" nzType="primary">添加属性</button>
 <br />
 <br />
-<nz-modal [(nzVisible)]="propertyAddIsVisible" nzTitle="添加计量类" (nzOnCancel)="propertyHandleCancel()">
+<nz-modal [(nzVisible)]="propertyAddIsVisible" nzTitle="添加属性" (nzOnCancel)="propertyHandleCancel()">
     <div *nzModalContent>
         <form nz-form [formGroup]="propertyAddForm">
             <nz-form-item>

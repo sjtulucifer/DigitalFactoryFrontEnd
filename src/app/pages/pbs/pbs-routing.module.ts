@@ -7,6 +7,10 @@ import { PropertyListComponent } from './property/property-list/property-list.co
 import { PropertyDetailComponent } from './property/property-detail/property-detail.component';
 import { FactoryTypeTreeComponent } from './factory-type/factory-type-tree/factory-type-tree.component';
 import { FactoryTypeDetailComponent } from './factory-type/factory-type-detail/factory-type-detail.component';
+import { FactoryListComponent } from './factory/factory-list/factory-list.component';
+import { FactoryDetailComponent } from './factory/factory-detail/factory-detail.component';
+import { FactoryObjectTreeComponent } from './factory-object/factory-object-tree/factory-object-tree.component';
+import { FactoryObjectDetailComponent } from './factory-object/factory-object-detail/factory-object-detail.component';
 
 const routes: Routes = [{
     path: '',
@@ -63,24 +67,41 @@ const routes: Routes = [{
           pathMatch: 'full',
         }],
     },
-    /*
+    
     {
-      path: 'menu',
+      path: 'factory',
       children: [
         {
-          path: 'menuList',
-          component: MenuListComponent,
+          path: 'factoryList',
+          component: FactoryListComponent,
         },
         {
-          path: 'menuDetail/:id',
-          component: MenuDetailComponent,
+          path: 'factoryDetail/:id',
+          component: FactoryDetailComponent,
         },
         {
           path: '',
-          redirectTo: 'menuList',
+          redirectTo: 'factoryList',
           pathMatch: 'full',
         }],
-    }*/
+    },
+    {
+      path: 'factoryObject',
+      children: [
+        {
+          path: 'factoryObjectTree',
+          component: FactoryObjectTreeComponent,
+        },
+        {
+          path: 'factoryObjectDetail/:id',
+          component: FactoryObjectDetailComponent,
+        },
+        {
+          path: '',
+          redirectTo: 'factoryObjectTree',
+          pathMatch: 'full',
+        }],
+    }
     ]
   }];
 

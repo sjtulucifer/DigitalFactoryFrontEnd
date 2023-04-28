@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  webApiUrl: "https://DigitalFactory:8888"
+  webApiUrl: "https://DigitalFactory:8888/"
 };

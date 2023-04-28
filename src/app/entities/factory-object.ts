@@ -4,7 +4,7 @@ import { Property } from "./property";
 
 export class FactoryObject {
     constructor(
-        public DocumeFactoryObjectIdntId?: string,
+        public FactoryObjectId?: string,
         public FactoryObjectCode?: string,
         public FactoryObjectName?: string,
         public FactoryObjectDescription?: string,

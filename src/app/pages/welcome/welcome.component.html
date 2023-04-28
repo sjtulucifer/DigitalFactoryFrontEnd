@@ -1,3 +1,20 @@
 <app-pages>
-    欢迎进入
+    <nz-table #factoryListTable [nzData]="factoryList">
+        <thead>
+            <tr>
+                <th>工厂代码</th>
+                <th>工厂名称</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of factoryListTable.data">
+                <td>{{data.FactoryCode}}</td>
+                <td>{{data.FactoryName}}</td>
+                <td>
+                    <a (click)="intoFactoryPBS(data.FactoryId!)">进入工厂分解</a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
 </app-pages>

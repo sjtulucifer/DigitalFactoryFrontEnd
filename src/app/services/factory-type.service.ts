@@ -60,4 +60,7 @@ export class FactoryTypeService {
     return this.$http.put(this.baseUrl + 'UpdateFactoryTypeProperty/' + factoryTypeId + '/' + propertyId, property);
   }
 
+  synchronizeFactoryObjectPropertyList(factoryTypeId: string, propertyIdList: string[]): Observable<any> {
+    return this.$http.post(this.baseUrl + 'SynchronizeFactoryObjectPropertyList/' + factoryTypeId, propertyIdList);
+  }
 }

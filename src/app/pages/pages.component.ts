@@ -22,7 +22,7 @@ class MenuItem {
 })
 export class PagesComponent implements OnInit {
 
-  isCollapsed = false;
+  isCollapsed: boolean = false;
 
   // 登录用户
   loginUser!: User;
@@ -114,10 +114,10 @@ export class PagesComponent implements OnInit {
         */
 
         temp.children = new Array<MenuItem>();
-        temp.children.push({ level: 2, title: element.MenuName, link: element.MenuUrl });
+        temp.children.push({ level: 2, title: element.MenuName, link: element.MenuUrl});
         result.push(temp);
       } else {
-        menuItem.children!.push({ level: 2, title: element.MenuName, link: element.MenuUrl });
+        menuItem.children!.push({ level: 2, title: element.MenuName, link: element.MenuUrl});
       }
     });
     return result;

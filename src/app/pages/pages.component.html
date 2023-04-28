@@ -18,11 +18,11 @@
       <ng-template #menuTpl let-menus>
         <ng-container *ngFor="let menu of menus">
           <li *ngIf="!menu.children" nz-menu-item [nzPaddingLeft]="menu.level * 24" [routerLink]="menu.link">
-            <i nz-icon [nzType]="menu.icon" *ngIf="menu.icon"></i>
+            <i nz-icon [nzType]="menu.icon" *ngIf="menu.icon" nzOpen></i>
             <span>{{ menu.title }}</span>
           </li>
           <li *ngIf="menu.children" nz-submenu [nzPaddingLeft]="menu.level * 24" [nzTitle]="menu.title"
-            [nzIcon]="menu.icon">
+            [nzIcon]="menu.icon" nzOpen>
             <ul>
               <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menu.children }"></ng-container>
             </ul>

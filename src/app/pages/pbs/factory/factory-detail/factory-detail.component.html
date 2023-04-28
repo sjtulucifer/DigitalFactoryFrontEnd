@@ -1,0 +1,39 @@
+<nz-card>
+    <nz-card-tab>
+        <nz-tabset nzType="card">
+            <nz-tab nzTitle="计量类信息">                
+                <form nz-form [formGroup]="factoryUpdateForm" (ngSubmit)="UpdateFactoryDetail()">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7">工厂代码</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback>
+                            <input nz-input formControlName="code" [(ngModel)]="factoryUpdate.FactoryCode"/>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>计量类名称</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..."
+                            [nzErrorTip]="nameErrorTpl">
+                            <input nz-input formControlName="name" [(ngModel)]="factoryUpdate.FactoryName"
+                                placeholder="请输入工厂名称" />
+                            <ng-template #nameErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">请输入工厂名称!</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7">工厂描述</nz-form-label>
+                        <nz-form-control [nzSpan]="12">
+                            <textarea formControlName="description" nz-input rows="2"
+                                [(ngModel)]="factoryUpdate.FactroyDescription" placeholder="工厂描述"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                            <button nz-button nzType="primary" [disabled]="!factoryUpdateForm.valid">保存</button>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-tab>
+        </nz-tabset>
+    </nz-card-tab>
+</nz-card>
