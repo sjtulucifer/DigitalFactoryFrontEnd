@@ -4,7 +4,10 @@
 
 export const environment = {
   production: false,
-  webApiUrl: "https://localhost:7001/"
+  webApiUrl: "https://localhost:7001/",
+  typeProperty: "类静态",
+  objectProperty: "对象静态",
+  runProperty: "运行"
 };
 
 /*

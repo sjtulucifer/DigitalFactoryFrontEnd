@@ -18,48 +18,6 @@ import { FactoryTypeService } from 'src/app/services/factory-type.service';
   styleUrls: ['./factory-object-tree.component.css']
 })
 export class FactoryObjectTreeComponent implements OnInit {
-  editFactoryObject(id: string) {
-    this.router.navigate(['pbs/factoryObject/factoryObjectDetail', id]);
-  }
-
-  objectTypeOnChange($event: any) {
-    if ($event !== null) {
-      this.selectFactoryType.FactoryTypeId = $event;
-    }
-  }
-
-  factoryObjectHandleOk() {
-    this.factoryObjectAdd.FatherObject = this.selectedFactoryObject;
-    this.factoryObjectAdd.ObjectType = this.selectFactoryType;
-    this.factoryObjectAdd.ObjectFactory = this.factory;
-    // console.log(this.factoryObjectAdd);
-    this.factoryObjectService.addFactoryObjectDetail(this.factoryObjectAdd).subscribe({
-      next: (res) => {
-        res = res as Result;
-        if (0 == res.Code) {
-          this.factoryObjectAdd = new FactoryObject();
-          this.factoryObjectAddIsVisible = false;
-          this.factoryObjectAdd = new FactoryObject();
-          this.selectFactoryType = new FactoryType();
-          this.factoryObjectAddForm.reset();
-          this.initFactoryObjectTree(this.factory.FactoryId!);
-        }
-      },
-      error: (error) => {
-        console.error(error);
-      },
-      complete: () => {
-        // console.info('complete')
-      }
-    });
-  }
-  
-  factoryObjectHandleCancel() {
-    this.factoryObjectAddIsVisible = false;
-    this.factoryObjectAdd = new FactoryObject();
-    this.selectFactoryType = new FactoryType();
-    this.factoryObjectAddForm.reset();
-  }
 
   // 工厂信息
   factory: Factory = new Factory();
@@ -157,6 +115,49 @@ export class FactoryObjectTreeComponent implements OnInit {
         // console.info('complete')
       }
     });
+  }
+
+  editFactoryObject(id: string) {
+    this.router.navigate(['pbs/factoryObject/factoryObjectDetail', id]);
+  }
+
+  objectTypeOnChange($event: any) {
+    if ($event !== null) {
+      this.selectFactoryType.FactoryTypeId = $event;
+    }
+  }
+
+  factoryObjectHandleOk() {
+    this.factoryObjectAdd.FatherObject = this.selectedFactoryObject;
+    this.factoryObjectAdd.ObjectType = this.selectFactoryType;
+    this.factoryObjectAdd.ObjectFactory = this.factory;
+    // console.log(this.factoryObjectAdd);
+    this.factoryObjectService.addFactoryObjectDetail(this.factoryObjectAdd).subscribe({
+      next: (res) => {
+        res = res as Result;
+        if (0 == res.Code) {
+          this.factoryObjectAdd = new FactoryObject();
+          this.factoryObjectAddIsVisible = false;
+          this.factoryObjectAdd = new FactoryObject();
+          this.selectFactoryType = new FactoryType();
+          this.factoryObjectAddForm.reset();
+          this.initFactoryObjectTree(this.factory.FactoryId!);
+        }
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        // console.info('complete')
+      }
+    });
+  }
+
+  factoryObjectHandleCancel() {
+    this.factoryObjectAddIsVisible = false;
+    this.factoryObjectAdd = new FactoryObject();
+    this.selectFactoryType = new FactoryType();
+    this.factoryObjectAddForm.reset();
   }
 
   // 初始化工厂对象类添加表单
@@ -265,6 +266,5 @@ export class FactoryObjectTreeComponent implements OnInit {
       }
     });
   }
-
 
 }

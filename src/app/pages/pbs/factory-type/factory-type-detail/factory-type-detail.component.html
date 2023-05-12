@@ -1,4 +1,7 @@
 <nz-card [nzTitle]="factoryTypeUpdate!.FactoryTypeCode">
+    <button nz-button nz-popconfirm nzPopconfirmTitle="同步对象属性将初始化所有该类型和其子类型的工厂对象的对象属性，确定同步么?"
+        (nzOnConfirm)="synchronizeObjectProperty()" nzType="primary">同步对象属性</button>
+    <br>
     <nz-card-tab>
         <nz-tabset nzType="card">
             <nz-modal [(nzVisible)]="propertyAddIsVisible" nzTitle="属性选择" (nzOnCancel)="propertyAddHandleCancel()">
@@ -112,7 +115,7 @@
                                         <nz-date-picker formControlName="value" nzMode="date"
                                             [(ngModel)]="propertyValueUpdate.PropertyValue" required></nz-date-picker>
                                         <ng-template #valueErrorTpl let-control>
-                                            <ng-container *ngIf="control.hasError('required')">请输入属性值!</ng-container>                                            
+                                            <ng-container *ngIf="control.hasError('required')">请输入属性值!</ng-container>
                                         </ng-template>
                                     </nz-form-control>
                                 </div>
@@ -169,11 +172,7 @@
                 </nz-table>
             </nz-tab>
             <nz-tab #object nzTitle="对象静态属性">
-                <nz-space>
-                    <button *nzSpaceItem nz-button (click)="addProperty(object.nzTitle.toString())"
-                        nzType="primary">添加属性</button>
-                    <button *nzSpaceItem nz-button nz-popconfirm nzPopconfirmTitle="确认同步吗?" (nzOnConfirm)="synchronizeObject()" nzType="primary">同步非类静态属性</button>
-                </nz-space>
+                <button nz-button (click)="addProperty(object.nzTitle.toString())" nzType="primary">添加属性</button>
                 <br>
                 <br>
                 <nz-table #objectPropertyListTable [nzData]="objectPropertyList" nzBordered="true">
@@ -184,9 +183,7 @@
                             <th>属性英文名</th>
                             <th>属性类别</th>
                             <th>属性数据类型</th>
-                            <!--
                             <th>操作</th>
-                            -->                            
                         </tr>
                     </thead>
                     <tbody>
@@ -196,21 +193,16 @@
                             <td>{{data.PropertyEName}}</td>
                             <td>{{data.PropertyCategory}}</td>
                             <td>{{data.PropertyDType}}</td>
-                            <!--
                             <td>
                                 <a nz-popconfirm nzPopconfirmTitle="确认删除该属性吗?"
                                     (nzOnConfirm)="deleteProperty(data.PropertyId!)">删除</a>
                             </td>
-                            -->
                         </tr>
                     </tbody>
                 </nz-table>
             </nz-tab>
             <nz-tab #run nzTitle="运行属性">
-                <nz-space>
-                    <button *nzSpaceItem nz-button nz-button (click)="addProperty(run.nzTitle.toString())" nzType="primary">添加属性</button>
-                    <button *nzSpaceItem nz-button nz-popconfirm nzPopconfirmTitle="确认同步吗?" (nzOnConfirm)="synchronizeObject()" nzType="primary">同步非类静态属性</button>
-                </nz-space>
+                <button nz-button nz-button (click)="addProperty(run.nzTitle.toString())" nzType="primary">添加属性</button>
                 <br>
                 <br>
                 <nz-table #runPropertyListTable [nzData]="runPropertyList" nzBordered="true">
@@ -221,10 +213,7 @@
                             <th>属性英文名</th>
                             <th>属性类别</th>
                             <th>属性数据类型</th>
-                            <!--
                             <th>操作</th>
-                            -->
-                            
                         </tr>
                     </thead>
                     <tbody>
@@ -234,12 +223,10 @@
                             <td>{{data.PropertyEName}}</td>
                             <td>{{data.PropertyCategory}}</td>
                             <td>{{data.PropertyDType}}</td>
-                            <!--
                             <td>
                                 <a nz-popconfirm nzPopconfirmTitle="确认删除该属性吗?"
                                     (nzOnConfirm)="deleteProperty(data.PropertyId!)">删除</a>
                             </td>                                                            
-                            -->
                         </tr>
                     </tbody>
                 </nz-table>

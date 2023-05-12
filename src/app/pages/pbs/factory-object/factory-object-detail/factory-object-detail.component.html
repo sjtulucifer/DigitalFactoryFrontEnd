@@ -7,7 +7,8 @@
                         <nz-form-label [nzSpan]="7" nzRequired>工厂对象类名称</nz-form-label>
                         <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中..."
                             [nzErrorTip]="nameErrorTpl">
-                            <input nz-input formControlName="name" [(ngModel)]="factoryObjectUpdate.FactoryObjectName"
+                            <input nz-input formControlName="name" 
+                                [(ngModel)]="factoryObjectUpdate.FactoryObjectName"
                                 placeholder="工厂对象名称" />
                             <ng-template #nameErrorTpl let-control>
                                 <ng-container *ngIf="control.hasError('required')">请输入工厂对象名称!</ng-container>
@@ -21,21 +22,21 @@
                                 nzPlaceHolder="请选择父对象" [(ngModel)]="fatherFactoryObject.FactoryObjectId"
                                 (ngModelChange)="fatherObjectOnChange($event)"></nz-tree-select>
                         </nz-form-control>
-                    </nz-form-item>
+                    </nz-form-item>                    
                     <nz-form-item>
                         <nz-form-label [nzSpan]="7" nzRequired>工厂对象类</nz-form-label>
                         <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中...">
-                            <input nz-input formControlName="type" [(ngModel)]="this.objectType.FactoryTypeName"
-                                placeholder="工厂对象类" />
+                            <input nz-input formControlName="type" [(ngModel)]="objectType.FactoryTypeName"/>
                         </nz-form-control>
-                      </nz-form-item>
+                    </nz-form-item>                    
                     <nz-form-item>
                         <nz-form-label [nzSpan]="7">工厂对象描述</nz-form-label>
                         <nz-form-control [nzSpan]="12">
                             <textarea formControlName="description" nz-input rows="2"
-                                [(ngModel)]="factoryObjectUpdate.FactoryObjectDescription" placeholder="工厂对象描述"></textarea>
+                                [(ngModel)]="factoryObjectUpdate.FactoryObjectDescription"
+                                placeholder="工厂对象描述"></textarea>
                         </nz-form-control>
-                    </nz-form-item>
+                    </nz-form-item>                    
                     <nz-form-item>
                         <nz-form-control [nzOffset]="7" [nzSpan]="12">
                             <button nz-button nzType="primary" [disabled]="!factoryObjectUpdateForm.valid">保存</button>
@@ -43,7 +44,7 @@
                     </nz-form-item>
                 </form>
             </nz-tab>
-            
+
             <nz-tab #type nzTitle="类静态属性">
                 <br>
                 <nz-table #typePropertyListTable [nzData]="typePropertyList" nzBordered="true">
@@ -60,18 +61,95 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let data of typePropertyListTable.data">
-                            <td>{{data.PropertyCode}}</td>
-                            <td>{{data.PropertyName}}</td>
-                            <td>{{data.PropertyEName}}</td>
-                            <td>{{data.PropertyCategory}}</td>
-                            <td>{{data.PropertyDType}}</td>
-                            <td>{{data.PropertyValue}}</td>
-                            <td>{{data.PropertyMeasurement?.MeasurementUnitName}}</td>
+                            <ng-container *ngIf="data.PropertyDType !=='日期'; else dateTemplate">
+                                <td>{{data.PropertyCode}}</td>
+                                <td>{{data.PropertyName}}</td>
+                                <td>{{data.PropertyEName}}</td>
+                                <td>{{data.PropertyCategory}}</td>
+                                <td>{{data.PropertyDType}}</td>
+                                <td>{{data.PropertyValue}}</td>
+                                <td>{{data.PropertyMeasurement?.MeasurementUnitName}}</td>
+                            </ng-container>
+                            <ng-template #dateTemplate>
+                                <td>{{data.PropertyCode}}</td>
+                                <td>{{data.PropertyName}}</td>
+                                <td>{{data.PropertyEName}}</td>
+                                <td>{{data.PropertyCategory}}</td>
+                                <td>{{data.PropertyDType}}</td>
+                                <td>{{data.PropertyValue | date:"yyyy-MM-dd"}}</td>
+                                <td>{{data.PropertyMeasurement?.MeasurementUnitName}}</td>
+                            </ng-template>
                         </tr>
                     </tbody>
                 </nz-table>
             </nz-tab>
             <nz-tab #object nzTitle="对象静态属性">
+                <nz-modal [(nzVisible)]="propertyValueUpdateIsVisible" nzTitle="更新属性值"
+                    (nzOnCancel)="propertyValueUpdateHandleCancel()">
+                    <div *nzModalContent>
+                        <form nz-form [formGroup]="propertyValueUpdateForm">
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7">属性名</nz-form-label>
+                                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中...">
+                                    <input nz-input formControlName="name"
+                                        [(ngModel)]="this.propertyValueUpdate.PropertyName" placeholder="属性名" />
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7">属性数据类型</nz-form-label>
+                                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="验证中...">
+                                    <input nz-input formControlName="dType"
+                                        [(ngModel)]="this.propertyValueUpdate.PropertyDType" placeholder="属性数据类型" />
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7">属性值</nz-form-label>
+                                <div *ngIf="propertyValueUpdate.PropertyDType==='数字'">
+                                    <nz-form-control [nzSpan]="12" [nzErrorTip]="valueErrorTpl">
+                                        <input nz-input formControlName="value" pattern="^\d+(\.\d{1,})$|(^[1-9]\d*$)"
+                                            required [(ngModel)]="propertyValueUpdate.PropertyValue"
+                                            placeholder="属性值" />
+                                        <ng-template #valueErrorTpl let-control>
+                                            <ng-container *ngIf="control.hasError('required')">请输入属性值!</ng-container>
+                                            <ng-container *ngIf="control.hasError('pattern')">请输入数字!</ng-container>
+                                        </ng-template>
+                                    </nz-form-control>
+                                </div>
+                                <div *ngIf="propertyValueUpdate.PropertyDType==='字符'">
+                                    <nz-form-control [nzSpan]="12" [nzErrorTip]="valueErrorTpl">
+                                        <input nz-input formControlName="value" required
+                                            [(ngModel)]="propertyValueUpdate.PropertyValue" placeholder="属性值" />
+                                        <ng-template #valueErrorTpl let-control>
+                                            <ng-container *ngIf="control.hasError('required')">请输入属性值!</ng-container>
+                                        </ng-template>
+                                    </nz-form-control>
+                                </div>
+                                <div *ngIf="propertyValueUpdate.PropertyDType==='日期'">
+                                    <nz-form-control [nzSpan]="12" [nzErrorTip]="valueErrorTpl">
+                                        <nz-date-picker formControlName="value" nzMode="date"
+                                            [(ngModel)]="propertyValueUpdate.PropertyValue" required></nz-date-picker>
+                                        <ng-template #valueErrorTpl let-control>
+                                            <ng-container *ngIf="control.hasError('required')">请输入属性值!</ng-container>                                            
+                                        </ng-template>
+                                    </nz-form-control>
+                                </div>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7">单位</nz-form-label>
+                                <nz-form-control [nzSpan]="12">
+                                    <input nz-input formControlName="unitName"
+                                        [(ngModel)]="this.propertyValueUpdateMeasurement.MeasurementUnitName"
+                                        placeholder="单位" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </form>
+                    </div>
+                    <div *nzModalFooter>
+                        <button nz-button nzType="default" (click)="propertyValueUpdateHandleCancel()">取消</button>
+                        <button nz-button nzType="primary" [disabled]="!propertyValueUpdateForm.valid"
+                            (click)="propertyValueUpdateHandleOk()">确定</button>
+                    </div>
+                </nz-modal>
                 <br>
                 <nz-table #objectPropertyListTable [nzData]="objectPropertyList" nzBordered="true">
                     <thead>
@@ -83,21 +161,22 @@
                             <th>属性数据类型</th>
                             <th>属性值</th>
                             <th>属性单位</th>
-                            <th>操作</th>                           
+                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let data of objectPropertyListTable.data">
-                            <td>{{data.PropertyCode}}</td>
-                            <td>{{data.PropertyName}}</td>
-                            <td>{{data.PropertyEName}}</td>
-                            <td>{{data.PropertyCategory}}</td>
-                            <td>{{data.PropertyDType}}</td>
-                            <td>{{data.PropertyValue}}</td>
-                            <td>{{data.PropertyMeasurement?.MeasurementUnitName}}</td>
-                            <td>
-                                <a (click)="editProperty(data.PropertyId!)">编辑</a>
-                            </td>
+                                <td>{{data.PropertyCode}}</td>
+                                <td>{{data.PropertyName}}</td>
+                                <td>{{data.PropertyEName}}</td>
+                                <td>{{data.PropertyCategory}}</td>
+                                <td>{{data.PropertyDType}}</td>
+                                <td>{{data.PropertyValue}}</td>
+                                <td>{{data.PropertyMeasurement?.MeasurementUnitName}}</td>
+                                <td>
+                                    <a (click)="editProperty(data.PropertyId!)">编辑</a>
+                                </td>
+                            
                         </tr>
                     </tbody>
                 </nz-table>
@@ -111,9 +190,9 @@
                             <th>属性中文名</th>
                             <th>属性英文名</th>
                             <th>属性类别</th>
-                            <th>属性数据类型</th>  
+                            <th>属性数据类型</th>
                             <th>属性值</th>
-                            <th>属性单位</th>                          
+                            <th>属性单位</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -129,7 +208,7 @@
                     </tbody>
                 </nz-table>
             </nz-tab>
-        
+
         </nz-tabset>
     </nz-card-tab>
 </nz-card>

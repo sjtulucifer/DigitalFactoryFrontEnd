@@ -16,6 +16,25 @@ import { PropertyService } from 'src/app/services/property.service';
   styleUrls: ['./factory-type-detail.component.css']
 })
 export class FactoryTypeDetailComponent implements OnInit {
+  synchronizeObjectProperty() {
+    this.factoryTypeService.SynchronizeFactoryObjectPropertyList(this.factoryTypeUpdate.FactoryTypeId!).subscribe({
+      next: (res) => {
+        if (0 == res.Code) {
+          this.refreshFactoryTypeDetail(this.factoryTypeUpdate.FactoryTypeId!);
+          this.setOfCheckedId.clear();
+          this.checked = false;
+          this.propertyAddList = [];
+          this.propertyAddIsVisible = false;
+        }
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        // console.info('complete')
+      }
+    });
+  }
 
   // 所有属性列表
   propertyList: Property[] = [];
@@ -255,31 +274,6 @@ export class FactoryTypeDetailComponent implements OnInit {
         // 如果删除成功
         if (0 == res.Code) {
           this.refreshFactoryTypeDetail(this.factoryTypeUpdate.FactoryTypeId!);
-        }
-      },
-      error: (error) => {
-        console.error(error);
-      },
-      complete: () => {
-        // console.info('complete')
-      }
-    });
-  }
-
-  synchronizeObject(): void {
-    var propertyIdList: string[] = [];
-    // 同步非类静态属性    
-    this.objectPropertyList.forEach(item => propertyIdList.push(item.PropertyId!));
-    this.runPropertyList.forEach(item => propertyIdList.push(item.PropertyId!));
-
-    this.factoryTypeService.synchronizeFactoryObjectPropertyList(this.factoryTypeUpdate.FactoryTypeId!, propertyIdList).subscribe({
-      next: (res) => {
-        if (0 == res.Code) {
-          this.refreshFactoryTypeDetail(this.factoryTypeUpdate.FactoryTypeId!);
-          this.setOfCheckedId.clear();
-          this.checked = false;
-          this.propertyAddList = [];
-          this.propertyAddIsVisible = false;
         }
       },
       error: (error) => {
